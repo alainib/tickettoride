@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Leaflet Maps - Création d'une carte avec l'API Leaflet (marker)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+      integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+      crossorigin=""
+    ></script>
+  </head>
+
+  <style>
+    html,
+    body {
+      height: 100%;
+    }
+
+    .leaflet-tooltip-top {
+      margin-top: -15px;
+    }
+  </style>
+
+  <body onload="initialize()">
+    <div id="map" style="width: 100%; height: 100%"></div>
+  </body>
+</html>
+<script type="text/javascript">
+  function initialize() {
+    var map = L.map('map').setView([35.0659731379842, 38.66088867187501], 8);
+
+    var osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png?lang=en', {
+      attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 18,
+    });
+
+    var points = [
+      { lat: 34.71903991764788, lng: 36.69982910156251, name: 'Homs' },
+      { lat: 33.49101671911275, lng: 36.28784179687501, name: 'Damas' },
+      { lat: 35.1154153142536, lng: 36.74926757812501, name: 'Hama' },
+      { lat: 35.007502842952896, lng: 37.06237792968751, name: 'Salamié' },
+      { lat: 36.19774164407363, lng: 37.16400146484376, name: 'Alep' },
+      { lat: 36.52067329034796, lng: 37.95501708984376, name: 'Menbege' },
+      { lat: 35.926868653041375, lng: 36.63803100585938, name: 'Edleb' },
+      { lat: 35.81001773806242, lng: 36.29470825195313, name: 'Jeser alSherou3' },
+      { lat: 35.827834717743585, lng: 38.54553222656251, name: 'Altabka' },
+      { lat: 35.94243575255426, lng: 39.00421142578126, name: 'Alraka' },
+      { lat: 35.33193221705642, lng: 40.14747619628907, name: 'Derzalzor' },
+      { lat: 35.01818803935104, lng: 40.45578002929688, name: 'Miyadine' },
+      { lat: 34.44938739141027, lng: 40.92887878417969, name: 'Kwa imi' },
+      { lat: 37.045312802603355, lng: 41.23306274414063, name: 'Kameshli' },
+      { lat: 36.500805317604815, lng: 40.748291015625, name: 'Hassaki' },
+      { lat: 36.053540128339755, lng: 40.73455810546876, name: 'Shadadi' },
+      { lat: 35.52216747798627, lng: 35.781784057617195, name: 'Lattakié' },
+      { lat: 35.358536196152826, lng: 35.92323303222657, name: 'Jableh' },
+      { lat: 34.89156324823376, lng: 35.89370727539063, name: 'Tartous' },
+      { lat: 34.820567967282706, lng: 36.10794067382813, name: 'Safita' },
+      { lat: 34.67105271935892, lng: 36.26071929931641, name: 'Talkalah' },
+      { lat: 34.7565069339837, lng: 36.31961205946552, name: 'Alhwash' },
+      { lat: 34.782741865056266, lng: 36.262984997070426, name: 'Marmarita' },
+      { lat: 34.77103591008091, lng: 36.34054691283585, name: 'Mzayni' },
+      { lat: 34.86548233857492, lng: 36.372120790050076, name: 'Kferam' },
+      { lat: 32.6204696364237, lng: 36.09759503572045, name: 'Dar3a' },
+			{"lat":32.7314695505486,"lng":36.586303743906065,"name":"Sweyda"},{"lat":34.562989499586386,"lng":38.283439703952695,"name":"Tadmor"},
+			{"lat":33.87420915005619,"lng":35.50222069681292,"name":"Beirut"},{"lat":34.43734571519846,"lng":35.8318583188889,"name":"Trablos"}
+    ];
+
+    map.on('contextmenu', function (event) {
+      console.log('Coordinates: ' + event.latlng.toString());
+
+      points.push({ ...event.latlng, name: '' });
+
+      console.log(JSON.stringify(points));
+    });
+
+    map.addLayer(osmLayer);
+
+    // Custom icon marker
+    var customIcon = L.icon({
+      iconUrl: 'icon-marker.png',
+      //shadowUrl: 'icon-shadow.png',
+      iconSize: [64, 64], // size of the icon
+      //shadowSize:   [50, 64], // size of the shadow
+      iconAnchor: [32, 64], // point of the icon which will correspond to marker's location
+      //shadowAnchor: [32, 64],  // the same for the shadow
+      popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
+    });
+    //L.marker([48.5, 0.5], {icon: customIcon}).addTo(map);
+
+    for (let i = 0; i < points.length; i++) {
+      let p = points[i];
+      L.marker([p.lat, p.lng]).addTo(map).bindPopup(p.name);
+    }
+  }
+</script>
